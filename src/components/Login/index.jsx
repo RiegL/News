@@ -1,17 +1,35 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 function Login() {
-  const aoSubmeter = (e) => {
+  const router = useRouter();
+  const [formulario, setFormulario] = useState({
+    email: "",
+    senha: "",
+  });
+
+  const aoSubmeter = async (e) => {
     e.preventDefault();
-    //TODO enviar para o servidor
-    console.log("submetido");
-    console.log({email,senha})
+    // TODO enviar para o servidor
+    try {
+      const result = await axios.post('http://localhost:8080/login', formulario);
+      window.alert(result.data.message);
+      router.push('/admin/noticia/criar');
+    } catch (error) {
+      window.alert(error.response.data.message);
+    }
   };
 
-  const [email, setEmail] = useState('')
-  const [senha, setSenha] = useState('')
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormulario({
+      ...formulario,
+      [name]: value,
+    });
+  };
 
   return (
     <form onSubmit={aoSubmeter}>
@@ -20,8 +38,8 @@ function Login() {
         <input
           type="text"
           name="email"
-          value={email}
-          onChange={(e)=>setEmail(e.target.value)}
+          value={formulario.email}
+          onChange={handleChange}
         />
       </div>
       <div>
@@ -29,8 +47,8 @@ function Login() {
         <input
           type="password"
           name="senha"
-          value={senha}
-          onChange={(e)=>setSenha(e.target.value)}
+          value={formulario.senha}
+          onChange={handleChange}
         />
       </div>
       <button type="submit">Entrar</button>

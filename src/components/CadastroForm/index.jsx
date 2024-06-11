@@ -1,12 +1,13 @@
 'use client'
 
 import { useState } from "react"
-
+import axios from "axios"
 function CadastroForm() {
 
 const aoSubmeter = (e)=>{
     e.preventDefault()
     //TODO enviar para o servidor
+    
     console.log('submetido')
     console.log(nome,email,senha)
 }
